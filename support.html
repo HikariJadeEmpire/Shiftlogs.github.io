@@ -339,32 +339,26 @@
   <p><a href="index.html">← Back to Shiftlog</a></p>
 </footer>
 
-<script>
+<!-- Octokit loaded from CDN (no bundler needed) -->
+<script type="module">
+import { Octokit } from 'https://esm.sh/@octokit/core';
+
 /**
  * ══════════════════════════════════════════════════
- *  GitHub API config
- *  ➜ Set these three values before deploying.
+ *  GitHub API config  ➜  fill in before deploying
  * ══════════════════════════════════════════════════
  *
- *  GITHUB_TOKEN  : A GitHub Personal Access Token with "repo" scope (Contents write).
- *                  Go to → https://github.com/settings/tokens → Generate new token (classic)
- *                  Scopes needed: repo → Contents (read + write)
+ *  GH_TOKEN : Personal Access Token with Contents write on this repo.
+ *             https://github.com/settings/tokens → Generate new token (classic)
+ *             Scope needed: repo → Contents (read + write)
  *
- *  GITHUB_OWNER  : Your GitHub username
- *  GITHUB_REPO   : Repository name (without .github.io)
- *
- *  ⚠️  IMPORTANT: Because this is a static public site, the token will be visible in
- *  your HTML source.  To keep it safer:
- *    Option A – Create a fine-grained token scoped ONLY to this repo, with ONLY
- *               Contents write permission.  Even if someone finds it, damage is limited.
- *    Option B – Use a small Cloudflare Worker / Netlify Function as a proxy (no token
- *               exposed at all).  Ask for help if you'd like that set up.
+ *  ⚠️  Token is visible in page source (static site limitation).
+ *      Use a fine-grained token scoped ONLY to this repo to limit exposure.
  */
-const GH_TOKEN = 'replace';   // ← replace
+const GH_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';   // ← replace with your token
 const GH_OWNER = 'hikarijadeempire';
 const GH_REPO  = 'Shiftlogs.github.io';
 const GH_FILE  = 'reports.json';
-const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
 
 // ── helpers ──────────────────────────────────────
 function show(el) {
@@ -376,41 +370,43 @@ function hideAll() {
   document.getElementById('toastError').classList.remove('show');
 }
 
+// ── Octokit instance ─────────────────────────────
+const octokit = new Octokit({ auth: GH_TOKEN });
+
 // ── fetch existing reports from GitHub ───────────
 async function loadReports() {
-  const res = await fetch(GH_API, {
-    headers: {
-      Authorization: `token ${GH_TOKEN}`,
-      Accept: 'application/vnd.github.v3+json'
-    }
-  });
-  if (res.status === 404) return { reports: [], sha: null };
-  if (!res.ok) throw new Error(`GitHub fetch failed: ${res.status}`);
-  const data = await res.json();
-  const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
-  return { reports: content, sha: data.sha };
+  try {
+    const { data } = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+      owner: GH_OWNER,
+      repo:  GH_REPO,
+      path:  GH_FILE,
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+    });
+    const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+    return { reports: content, sha: data.sha };
+  } catch (err) {
+    if (err.status === 404) return { reports: [], sha: null };
+    throw err;
+  }
 }
 
 // ── commit updated reports.json back to GitHub ───
 async function saveReports(reports, sha) {
-  const body = {
+  const payload = {
+    owner:   GH_OWNER,
+    repo:    GH_REPO,
+    path:    GH_FILE,
     message: `Add support report ${new Date().toISOString()}`,
-    content: btoa(unescape(encodeURIComponent(JSON.stringify(reports, null, 2)))),
-    ...(sha ? { sha } : {})
-  };
-  const res = await fetch(GH_API, {
-    method: 'PUT',
-    headers: {
-      Authorization: `token ${GH_TOKEN}`,
-      Accept: 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
+    committer: {
+      name:  'Shiftlog Support Bot',
+      email: 'support@shiftlog.app'
     },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `GitHub save failed: ${res.status}`);
-  }
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(reports, null, 2)))),
+    headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+  };
+  if (sha) payload.sha = sha;   // required when updating an existing file
+
+  await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', payload);
 }
 
 // ── form submit ───────────────────────────────────
@@ -425,7 +421,7 @@ document.getElementById('supportForm').addEventListener('submit', async (e) => {
   const errorMsg    = document.getElementById('errorMsg');
   const btn         = document.getElementById('submitBtn');
 
-  // Validate
+  // ── client-side validation ────────────────────
   if (!name || !email || !category || !description) {
     errorMsg.textContent = 'Please fill in all required fields.';
     show(document.getElementById('toastError'));
@@ -443,12 +439,12 @@ document.getElementById('supportForm').addEventListener('submit', async (e) => {
   }
 
   const report = {
-    id: 'RPT-' + Date.now(),
+    id:           'RPT-' + Date.now(),
     submitted_at: new Date().toISOString(),
     name, email, category, description
   };
 
-  // Loading state
+  // ── loading state ─────────────────────────────
   btn.disabled = true;
   btn.classList.add('loading');
 
@@ -461,7 +457,7 @@ document.getElementById('supportForm').addEventListener('submit', async (e) => {
     show(document.getElementById('toastSuccess'));
   } catch (err) {
     console.error(err);
-    errorMsg.textContent = 'Could not save your report right now. Please try again in a moment.';
+    errorMsg.textContent = err.message || 'Could not save your report right now. Please try again in a moment.';
     show(document.getElementById('toastError'));
   } finally {
     btn.disabled = false;

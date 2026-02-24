@@ -1,234 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0d1a35"/>
   <title>Support — Shiftlog.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --teal: #3ecfb2;
+      --teal:      #3ecfb2;
       --teal-dark: #1a8f7d;
-      --navy: #1a2744;
+      --navy:      #1a2744;
       --navy-deep: #0d1a35;
-      --white: #f5fffe;
-      --accent: #5ce8c8;
+      --white:     #f0fffe;
+      --muted:     rgba(240,255,254,0.55);
+      --accent:    #5ce8c8;
+      --red:       #ff6b6b;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Nunito Sans', sans-serif;
       background: var(--navy-deep);
       color: var(--white);
-      min-height: 100vh;
+      min-height: 100svh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* ── BG ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 10% 0%, rgba(30,175,155,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 90% 100%, rgba(26,40,100,0.5) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── HEADER ── */
     header {
-      padding: 28px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      position: sticky; top: 0; z-index: 100;
+      padding: 16px 20px calc(16px + env(safe-area-inset-top, 0px));
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(10,22,52,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     header a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-decoration: none;
-      color: inherit;
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: inherit;
     }
 
-    .header-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      overflow: hidden;
+    .hdr-logo {
+      width: 40px; height: 40px;
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 4px 14px rgba(62,207,178,0.25);
+      flex-shrink: 0;
     }
+    .hdr-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .header-logo img { width: 100%; height: 100%; object-fit: cover; }
-
-    .header-brand {
+    .hdr-brand {
       font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 1.5rem;
+      font-weight: 900; font-size: 1.3rem;
       color: #fff;
     }
+    .hdr-brand span { color: var(--teal); }
 
-    .header-brand span { color: var(--teal); }
-
+    /* ── MAIN ── */
     main {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 60px 24px 80px;
+      flex: 1; position: relative; z-index: 1;
+      display: flex; justify-content: center;
+      padding: 40px 16px 60px;
     }
 
     .card {
-      background: linear-gradient(145deg, rgba(62,207,178,0.08) 0%, rgba(26,39,68,0.5) 100%);
-      border: 1px solid rgba(62,207,178,0.15);
+      background: linear-gradient(150deg, rgba(62,207,178,0.07) 0%, rgba(15,28,62,0.6) 100%);
+      border: 1px solid rgba(62,207,178,0.13);
       border-radius: 24px;
-      padding: 48px 48px;
-      width: 100%;
-      max-width: 580px;
-      animation: fadeUp 0.8s ease both;
+      padding: clamp(28px, 6vw, 48px) clamp(20px, 5vw, 44px);
+      width: 100%; max-width: 560px;
+      animation: fadeUp .7s ease both;
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(26px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(62,207,178,0.12);
-      border: 1px solid rgba(62,207,178,0.25);
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(62,207,178,0.1);
+      border: 1px solid rgba(62,207,178,0.22);
       border-radius: 100px;
-      padding: 6px 16px;
+      padding: 5px 14px;
       font-family: 'Nunito', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      font-size: .7rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
       color: var(--teal);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     h1 {
       font-family: 'Nunito', sans-serif;
       font-weight: 900;
-      font-size: 2.2rem;
-      color: #fff;
+      font-size: clamp(1.7rem, 7vw, 2.4rem);
+      line-height: 1.1; color: #fff;
       margin-bottom: 10px;
-      line-height: 1.1;
     }
 
     .subtitle {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.55);
+      font-size: clamp(.85rem, 3vw, .95rem);
+      color: var(--muted);
       line-height: 1.7;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
 
-    .form-group {
-      margin-bottom: 22px;
-    }
+    /* ── FORM ── */
+    .form-group { margin-bottom: 18px; }
 
     label {
       display: block;
       font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 0.8rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+      font-weight: 800; font-size: .72rem;
+      letter-spacing: 1.8px; text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     input, select, textarea {
       width: 100%;
       background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.11);
       border-radius: 12px;
-      padding: 14px 18px;
+      padding: 13px 16px;
       color: #fff;
       font-family: 'Nunito Sans', sans-serif;
-      font-size: 0.95rem;
+      font-size: 1rem; /* prevents iOS zoom */
       outline: none;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color .2s, background .2s;
       -webkit-appearance: none;
+      appearance: none;
     }
-
-    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
-
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.28); }
     input:focus, select:focus, textarea:focus {
       border-color: var(--teal);
-      background: rgba(62,207,178,0.05);
+      background: rgba(62,207,178,0.06);
     }
-
-    select option { background: var(--navy); color: #fff; }
+    select { cursor: pointer; }
+    select option { background: #1a2744; color: #fff; }
 
     textarea {
       resize: vertical;
-      min-height: 130px;
-      line-height: 1.6;
+      min-height: 120px;
+      line-height: 1.65;
     }
 
+    /* select arrow */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--accent); font-size: .85rem; pointer-events: none;
+    }
+
+    /* ── SUBMIT BTN ── */
     .submit-btn {
       width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+      padding: 15px;
+      border: none; border-radius: 14px;
+      background: linear-gradient(110deg, var(--teal-dark) 0%, var(--teal) 100%);
       color: var(--navy-deep);
       font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 1rem;
-      letter-spacing: 0.5px;
+      font-weight: 900; font-size: 1rem;
+      letter-spacing: .3px;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
-      margin-top: 8px;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+      margin-top: 6px;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
     }
+    .submit-btn:not(:disabled):hover {
+      opacity: .92; transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(62,207,178,0.3);
+    }
+    .submit-btn:not(:disabled):active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: .45; cursor: not-allowed; }
 
-    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .submit-btn:active { transform: translateY(0); }
-    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    /* spinner inside button */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(13,26,53,0.3);
+      border-top-color: var(--navy-deep);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-label { opacity: 0; }
 
-    /* Toast */
+    /* ── TOASTS ── */
     .toast {
       display: none;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      background: linear-gradient(135deg, rgba(62,207,178,0.2), rgba(26,39,68,0.8));
-      border: 1px solid rgba(62,207,178,0.4);
       border-radius: 14px;
-      padding: 18px 22px;
-      margin-top: 20px;
-      animation: fadeUp 0.4s ease both;
+      padding: 16px 18px;
+      margin-top: 18px;
     }
-
-    .toast.show { display: flex; }
-
-    .toast-icon { font-size: 1.5rem; }
-
-    .toast-text strong {
+    .toast.show { display: flex; animation: fadeUp .4s ease both; }
+    .toast-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+    .toast-body strong {
       display: block;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      color: var(--teal);
-      margin-bottom: 2px;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      margin-bottom: 3px; font-size: .95rem;
     }
+    .toast-body p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
 
-    .toast-text p { font-size: 0.88rem; color: rgba(255,255,255,0.65); }
-
-    .error-toast {
-      background: linear-gradient(135deg, rgba(255,80,80,0.15), rgba(26,39,68,0.8));
-      border-color: rgba(255,100,100,0.4);
+    .toast-success {
+      background: rgba(62,207,178,0.1);
+      border: 1px solid rgba(62,207,178,0.3);
     }
+    .toast-success strong { color: var(--teal); }
 
-    .error-toast strong { color: #ff8888 !important; }
+    .toast-error {
+      background: rgba(255,107,107,0.1);
+      border: 1px solid rgba(255,107,107,0.3);
+    }
+    .toast-error strong { color: var(--red); }
 
+    /* ── FOOTER ── */
     footer {
-      padding: 24px;
-      text-align: center;
+      position: relative; z-index: 1;
       border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 22px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+      text-align: center;
     }
-
-    footer p { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
-    footer a { color: var(--teal); text-decoration: none; }
+    footer p { font-size: .78rem; color: rgba(255,255,255,0.28); }
+    footer a { color: var(--teal); text-decoration: none; font-weight: 700; }
     footer a:hover { text-decoration: underline; }
 
-    @media (max-width: 540px) {
-      .card { padding: 32px 24px; }
-      h1 { font-size: 1.7rem; }
+    /* ── RESPONSIVE tweaks ── */
+    @media (max-width: 400px) {
+      .card { border-radius: 18px; }
     }
   </style>
 </head>
@@ -236,10 +261,8 @@
 
 <header>
   <a href="index.html">
-    <div class="header-logo">
-      <img src="App_LOGO.png" alt="Shiftlog Logo">
-    </div>
-    <span class="header-brand">Shift<span>log.</span></span>
+    <div class="hdr-logo"><img src="App_LOGO.png" alt="Shiftlog"></div>
+    <span class="hdr-brand">Shift<span>log.</span></span>
   </a>
 </header>
 
@@ -247,53 +270,65 @@
   <div class="card">
     <div class="badge">🛠 Support</div>
     <h1>Report a Problem</h1>
-    <p class="subtitle">Something not working right? Let us know. We read every report and will get back to you as quickly as we can.</p>
+    <p class="subtitle">Something not working right? Tell us what happened and we'll look into it. We read every report.</p>
 
-    <form id="supportForm" novalidate>
+    <form id="supportForm" novalidate autocomplete="on">
+
       <div class="form-group">
         <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" placeholder="e.g. Alex Johnson" required>
+        <input type="text" id="name" name="name" placeholder="e.g. Alex Johnson"
+               autocomplete="name" inputmode="text" required>
       </div>
 
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <input type="email" id="email" name="email" placeholder="you@example.com"
+               autocomplete="email" inputmode="email" required>
       </div>
 
       <div class="form-group">
-        <label for="category">Problem Category</label>
-        <select id="category" name="category" required>
-          <option value="" disabled selected>Choose a category…</option>
-          <option value="schedule">Schedule / Shifts</option>
-          <option value="overtime">Overtime Calculation</option>
-          <option value="team-sync">Team Sync</option>
-          <option value="login">Login / Account</option>
-          <option value="notifications">Notifications</option>
-          <option value="performance">Performance / Crashes</option>
-          <option value="other">Other</option>
-        </select>
+        <label for="category">Category</label>
+        <div class="select-wrap">
+          <select id="category" name="category" required>
+            <option value="" disabled selected>Choose a category…</option>
+            <option value="schedule">Schedule / Shifts</option>
+            <option value="overtime">Overtime Calculation</option>
+            <option value="team-sync">Team Sync</option>
+            <option value="login">Login / Account</option>
+            <option value="notifications">Notifications</option>
+            <option value="performance">Performance / Crashes</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="description">Describe the Problem</label>
-        <textarea id="description" name="description" placeholder="Please describe what happened, what you expected, and any steps to reproduce the issue…" required></textarea>
+        <label for="description">What happened?</label>
+        <textarea id="description" name="description"
+          placeholder="Describe the problem, what you expected to happen, and any steps to reproduce it…"
+          required></textarea>
       </div>
 
-      <button type="submit" class="submit-btn" id="submitBtn">Send Report →</button>
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="btn-label">Send Report →</span>
+        <span class="spinner"></span>
+      </button>
     </form>
 
-    <div class="toast" id="successToast">
+    <!-- Success -->
+    <div class="toast toast-success" id="toastSuccess">
       <span class="toast-icon">✅</span>
-      <div class="toast-text">
+      <div class="toast-body">
         <strong>Report submitted!</strong>
-        <p>Thanks for reaching out. We'll review your report and be in touch shortly.</p>
+        <p>Thanks for reaching out. Your report has been saved and we'll be in touch soon.</p>
       </div>
     </div>
 
-    <div class="toast error-toast" id="errorToast">
+    <!-- Error -->
+    <div class="toast toast-error" id="toastError">
       <span class="toast-icon">⚠️</span>
-      <div class="toast-text">
-        <strong>Submission failed</strong>
+      <div class="toast-body">
+        <strong>Couldn't submit</strong>
         <p id="errorMsg">Please fill in all required fields and try again.</p>
       </div>
     </div>
@@ -305,93 +340,135 @@
 </footer>
 
 <script>
-  const form = document.getElementById('supportForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successToast = document.getElementById('successToast');
-  const errorToast = document.getElementById('errorToast');
-  const errorMsg = document.getElementById('errorMsg');
+/**
+ * ══════════════════════════════════════════════════
+ *  GitHub API config
+ *  ➜ Set these three values before deploying.
+ * ══════════════════════════════════════════════════
+ *
+ *  GITHUB_TOKEN  : A GitHub Personal Access Token with "repo" scope (Contents write).
+ *                  Go to → https://github.com/settings/tokens → Generate new token (classic)
+ *                  Scopes needed: repo → Contents (read + write)
+ *
+ *  GITHUB_OWNER  : Your GitHub username
+ *  GITHUB_REPO   : Repository name (without .github.io)
+ *
+ *  ⚠️  IMPORTANT: Because this is a static public site, the token will be visible in
+ *  your HTML source.  To keep it safer:
+ *    Option A – Create a fine-grained token scoped ONLY to this repo, with ONLY
+ *               Contents write permission.  Even if someone finds it, damage is limited.
+ *    Option B – Use a small Cloudflare Worker / Netlify Function as a proxy (no token
+ *               exposed at all).  Ask for help if you'd like that set up.
+ */
+const GH_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';   // ← replace
+const GH_OWNER = 'hikarijadeempire';
+const GH_REPO  = 'Shiftlogs.github.io';
+const GH_FILE  = 'reports.json';
+const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
 
-  function showToast(el) {
-    el.classList.add('show');
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+// ── helpers ──────────────────────────────────────
+function show(el) {
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function hideAll() {
+  document.getElementById('toastSuccess').classList.remove('show');
+  document.getElementById('toastError').classList.remove('show');
+}
 
-  function hideToasts() {
-    successToast.classList.remove('show');
-    errorToast.classList.remove('show');
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideToasts();
-
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const category = document.getElementById('category').value;
-    const description = document.getElementById('description').value.trim();
-
-    if (!name || !email || !category || !description) {
-      errorMsg.textContent = 'Please fill in all required fields and try again.';
-      showToast(errorToast);
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      errorMsg.textContent = 'Please enter a valid email address.';
-      showToast(errorToast);
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
-
-    const report = {
-      id: 'RPT-' + Date.now(),
-      timestamp: new Date().toISOString(),
-      name,
-      email,
-      category,
-      description
-    };
-
-    try {
-      // POST to server-side handler which saves to reports.json
-      const res = await fetch('submit_report.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(report)
-      });
-
-      if (!res.ok) throw new Error('Server error');
-
-      form.reset();
-      showToast(successToast);
-    } catch (err) {
-      // Fallback: download locally if no server
-      saveReportLocally(report);
-      form.reset();
-      showToast(successToast);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Report →';
+// ── fetch existing reports from GitHub ───────────
+async function loadReports() {
+  const res = await fetch(GH_API, {
+    headers: {
+      Authorization: `token ${GH_TOKEN}`,
+      Accept: 'application/vnd.github.v3+json'
     }
   });
+  if (res.status === 404) return { reports: [], sha: null };
+  if (!res.ok) throw new Error(`GitHub fetch failed: ${res.status}`);
+  const data = await res.json();
+  const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+  return { reports: content, sha: data.sha };
+}
 
-  function saveReportLocally(report) {
-    // Saves as a downloadable JSON file when no backend is available
-    const stored = JSON.parse(localStorage.getItem('shiftlog_reports') || '[]');
-    stored.push(report);
-    localStorage.setItem('shiftlog_reports', JSON.stringify(stored));
-
-    // Also trigger download
-    const blob = new Blob([JSON.stringify(stored, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'reports.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
+// ── commit updated reports.json back to GitHub ───
+async function saveReports(reports, sha) {
+  const body = {
+    message: `Add support report ${new Date().toISOString()}`,
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(reports, null, 2)))),
+    ...(sha ? { sha } : {})
+  };
+  const res = await fetch(GH_API, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${GH_TOKEN}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub save failed: ${res.status}`);
   }
+}
+
+// ── form submit ───────────────────────────────────
+document.getElementById('supportForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideAll();
+
+  const name        = document.getElementById('name').value.trim();
+  const email       = document.getElementById('email').value.trim();
+  const category    = document.getElementById('category').value;
+  const description = document.getElementById('description').value.trim();
+  const errorMsg    = document.getElementById('errorMsg');
+  const btn         = document.getElementById('submitBtn');
+
+  // Validate
+  if (!name || !email || !category || !description) {
+    errorMsg.textContent = 'Please fill in all required fields.';
+    show(document.getElementById('toastError'));
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorMsg.textContent = 'Please enter a valid email address.';
+    show(document.getElementById('toastError'));
+    return;
+  }
+  if (GH_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
+    errorMsg.textContent = 'The site owner has not yet configured the GitHub token. Please try again later.';
+    show(document.getElementById('toastError'));
+    return;
+  }
+
+  const report = {
+    id: 'RPT-' + Date.now(),
+    submitted_at: new Date().toISOString(),
+    name, email, category, description
+  };
+
+  // Loading state
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  try {
+    const { reports, sha } = await loadReports();
+    reports.push(report);
+    await saveReports(reports, sha);
+
+    document.getElementById('supportForm').reset();
+    show(document.getElementById('toastSuccess'));
+  } catch (err) {
+    console.error(err);
+    errorMsg.textContent = 'Could not save your report right now. Please try again in a moment.';
+    show(document.getElementById('toastError'));
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+});
 </script>
+
 </body>
 </html>

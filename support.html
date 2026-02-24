@@ -339,102 +339,102 @@
   <p><a href="index.html">← Back to Shiftlog</a></p>
 </footer>
 
-<!-- Octokit loaded from CDN (no bundler needed) -->
+<!-- Octokit (ESM bundle via CDN) -->
 <script type="module">
-import { Octokit } from 'https://esm.sh/@octokit/core';
+import { Octokit } from 'https://esm.sh/@octokit/rest@20';
 
 /**
- * ══════════════════════════════════════════════════
- *  GitHub API config  ➜  fill in before deploying
- * ══════════════════════════════════════════════════
- *
- *  GH_TOKEN : Personal Access Token with Contents write on this repo.
- *             https://github.com/settings/tokens → Generate new token (classic)
- *             Scope needed: repo → Contents (read + write)
- *
- *  ⚠️  Token is visible in page source (static site limitation).
- *      Use a fine-grained token scoped ONLY to this repo to limit exposure.
+ * ══════════════════════════════════════════════
+ *  CONFIG — replace GH_TOKEN before deploying
+ * ══════════════════════════════════════════════
+ *  1. Go to https://github.com/settings/tokens
+ *  2. Generate new token (classic)
+ *  3. Tick only: repo → Contents (read & write)
+ *  4. Paste the token below
  */
-const GH_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';   // ← replace with your token
+const GH_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';  // ← replace
 const GH_OWNER = 'hikarijadeempire';
 const GH_REPO  = 'Shiftlogs.github.io';
-const GH_FILE  = 'reports.json';
+const GH_PATH  = 'reports.json';
 
-// ── helpers ──────────────────────────────────────
-function show(el) {
+// ── helpers ──────────────────────────────────
+function showToast(id) {
+  const el = document.getElementById(id);
   el.classList.add('show');
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-function hideAll() {
+function hideToasts() {
   document.getElementById('toastSuccess').classList.remove('show');
   document.getElementById('toastError').classList.remove('show');
 }
 
-// ── Octokit instance ─────────────────────────────
-const octokit = new Octokit({ auth: GH_TOKEN });
-
-// ── fetch existing reports from GitHub ───────────
-async function loadReports() {
+// ── load existing reports.json from GitHub ───
+async function loadReports(octokit) {
   try {
     const { data } = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
       owner: GH_OWNER,
       repo:  GH_REPO,
-      path:  GH_FILE,
+      path:  GH_PATH,
       headers: { 'X-GitHub-Api-Version': '2022-11-28' }
     });
-    const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
-    return { reports: content, sha: data.sha };
+    const decoded = JSON.parse(atob(data.content.replace(/\n/g, '')));
+    return { reports: decoded, sha: data.sha };
   } catch (err) {
     if (err.status === 404) return { reports: [], sha: null };
     throw err;
   }
 }
 
-// ── commit updated reports.json back to GitHub ───
-async function saveReports(reports, sha) {
-  const payload = {
+// ── commit updated reports.json back ─────────
+async function saveReports(octokit, reports, sha) {
+  // encode to base64 (supports unicode)
+  const jsonStr = JSON.stringify(reports, null, 2);
+  const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+  const params = {
     owner:   GH_OWNER,
     repo:    GH_REPO,
-    path:    GH_FILE,
-    message: `Add support report ${new Date().toISOString()}`,
+    path:    GH_PATH,
+    message: `Support report submitted ${new Date().toISOString()}`,
     committer: {
       name:  'Shiftlog Support Bot',
       email: 'support@shiftlog.app'
     },
-    content: btoa(unescape(encodeURIComponent(JSON.stringify(reports, null, 2)))),
+    content: b64,
     headers: { 'X-GitHub-Api-Version': '2022-11-28' }
   };
-  if (sha) payload.sha = sha;   // required when updating an existing file
 
-  await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', payload);
+  // sha is required when updating an existing file
+  if (sha) params.sha = sha;
+
+  await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', params);
 }
 
-// ── form submit ───────────────────────────────────
+// ── form submit ───────────────────────────────
 document.getElementById('supportForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  hideAll();
+  hideToasts();
 
   const name        = document.getElementById('name').value.trim();
   const email       = document.getElementById('email').value.trim();
   const category    = document.getElementById('category').value;
   const description = document.getElementById('description').value.trim();
-  const errorMsg    = document.getElementById('errorMsg');
   const btn         = document.getElementById('submitBtn');
 
-  // ── client-side validation ────────────────────
+  // Validate
   if (!name || !email || !category || !description) {
-    errorMsg.textContent = 'Please fill in all required fields.';
-    show(document.getElementById('toastError'));
+    document.getElementById('errorMsg').textContent = 'Please fill in all required fields.';
+    showToast('toastError');
     return;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errorMsg.textContent = 'Please enter a valid email address.';
-    show(document.getElementById('toastError'));
+    document.getElementById('errorMsg').textContent = 'Please enter a valid email address.';
+    showToast('toastError');
     return;
   }
   if (GH_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
-    errorMsg.textContent = 'The site owner has not yet configured the GitHub token. Please try again later.';
-    show(document.getElementById('toastError'));
+    document.getElementById('errorMsg').textContent = 'Token not configured yet. Please try again later.';
+    showToast('toastError');
     return;
   }
 
@@ -444,21 +444,24 @@ document.getElementById('supportForm').addEventListener('submit', async (e) => {
     name, email, category, description
   };
 
-  // ── loading state ─────────────────────────────
+  // Loading state
   btn.disabled = true;
   btn.classList.add('loading');
 
   try {
-    const { reports, sha } = await loadReports();
+    const octokit = new Octokit({ auth: GH_TOKEN });
+
+    const { reports, sha } = await loadReports(octokit);
     reports.push(report);
-    await saveReports(reports, sha);
+    await saveReports(octokit, reports, sha);
 
     document.getElementById('supportForm').reset();
-    show(document.getElementById('toastSuccess'));
+    showToast('toastSuccess');
   } catch (err) {
-    console.error(err);
-    errorMsg.textContent = err.message || 'Could not save your report right now. Please try again in a moment.';
-    show(document.getElementById('toastError'));
+    console.error('GitHub error:', err);
+    document.getElementById('errorMsg').textContent =
+      'Could not save your report right now. Please try again in a moment.';
+    showToast('toastError');
   } finally {
     btn.disabled = false;
     btn.classList.remove('loading');

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0d1a35"/>
+  <title>Terms of Service — Shiftlog.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:      #3ecfb2;
+      --teal-mid:  #25b09a;
+      --teal-dark: #1a8f7d;
+      --navy:      #1a2744;
+      --navy-deep: #0d1a35;
+      --white:     #f0fffe;
+      --muted:     rgba(240,255,254,0.55);
+      --accent:    #5ce8c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--navy-deep);
+      color: var(--white);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 65% 45% at 5% 0%, rgba(30,175,155,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 95% 100%, rgba(26,40,100,0.45) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      padding: 14px 20px;
+      padding-top: calc(14px + env(safe-area-inset-top, 0px));
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(10,22,52,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    header a {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: inherit;
+    }
+
+    .hdr-logo {
+      width: 38px; height: 38px;
+      border-radius: 9px; overflow: hidden;
+      box-shadow: 0 4px 14px rgba(62,207,178,0.22);
+      flex-shrink: 0;
+    }
+    .hdr-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .hdr-brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 1.25rem; color: #fff;
+    }
+    .hdr-brand span { color: var(--teal); }
+
+    /* HERO BANNER */
+    .hero-banner {
+      position: relative; z-index: 1;
+      padding: 52px 20px 44px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(30,175,155,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 56px; height: 3px;
+      background: linear-gradient(90deg, var(--teal-dark), var(--teal));
+      border-radius: 0 0 4px 4px;
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(62,207,178,0.1);
+      border: 1px solid rgba(62,207,178,0.22);
+      border-radius: 100px;
+      padding: 5px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: .7rem; font-weight: 800;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 18px;
+    }
+
+    .hero-banner h1 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 8vw, 3.2rem);
+      line-height: 1.05; color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+
+    .hero-banner p {
+      font-size: clamp(.85rem, 2.5vw, .95rem);
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .last-updated {
+      margin-top: 14px;
+      display: inline-block;
+      font-size: .72rem;
+      color: rgba(240,255,254,0.3);
+      font-style: italic;
+    }
+
+    /* MAIN */
+    main {
+      position: relative; z-index: 1;
+      flex: 1;
+      width: 100%; max-width: 760px;
+      margin: 0 auto;
+      padding: 16px 16px 72px;
+    }
+
+    /* TOC */
+    .toc {
+      background: linear-gradient(150deg, rgba(62,207,178,0.07) 0%, rgba(15,28,62,0.6) 100%);
+      border: 1px solid rgba(62,207,178,0.13);
+      border-radius: 18px;
+      padding: 24px 26px;
+      margin-bottom: 20px;
+      animation: fadeUp .6s ease both;
+    }
+
+    .toc-label {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: .7rem;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .toc ol {
+      padding-left: 18px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .toc ol li { list-style: decimal; }
+
+    .toc a {
+      color: rgba(240,255,254,0.62);
+      text-decoration: none;
+      font-size: .88rem; font-weight: 600;
+      transition: color .2s;
+    }
+    .toc a:hover { color: var(--teal); }
+
+    /* SECTIONS */
+    .tos-section {
+      background: linear-gradient(150deg, rgba(62,207,178,0.07) 0%, rgba(15,28,62,0.6) 100%);
+      border: 1px solid rgba(62,207,178,0.13);
+      border-radius: 20px;
+      padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 34px);
+      margin-bottom: 16px;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .tos-section:hover {
+      border-color: rgba(62,207,178,0.28);
+      box-shadow: 0 12px 36px rgba(62,207,178,0.07);
+    }
+
+    .section-num {
+      font-family: 'Nunito', sans-serif;
+      font-size: .68rem; font-weight: 800;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-num::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(92,232,200,0.3), transparent);
+    }
+
+    .tos-section h2 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.1rem, 4vw, 1.35rem);
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .tos-section p {
+      font-size: clamp(.84rem, 2.5vw, .93rem);
+      color: rgba(240,255,254,0.62);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .tos-section p:last-child { margin-bottom: 0; }
+
+    /* sub items */
+    .tos-items { display: flex; flex-direction: column; gap: 14px; margin-top: 2px; }
+
+    .tos-item { display: flex; gap: 14px; align-items: flex-start; }
+
+    .tos-item-icon {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      background: rgba(62,207,178,0.11);
+      border: 1px solid rgba(62,207,178,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .95rem; flex-shrink: 0; margin-top: 1px;
+    }
+
+    .tos-item-body { flex: 1; }
+
+    .tos-item-body strong {
+      display: block;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: .9rem;
+      color: var(--white);
+      margin-bottom: 5px;
+    }
+
+    .tos-item-body p {
+      font-size: clamp(.81rem, 2.3vw, .88rem);
+      color: rgba(240,255,254,0.55);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    /* callout */
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(255,200,80,0.07);
+      border: 1px solid rgba(255,200,80,0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+    .callout-icon { font-size: 1.05rem; flex-shrink: 0; margin-top: 2px; }
+    .callout p {
+      font-size: .82rem !important;
+      color: rgba(255,215,110,0.78) !important;
+      margin: 0 !important;
+      line-height: 1.65 !important;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 20px;
+      padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      text-align: center;
+    }
+    footer p { font-size: .78rem; color: rgba(255,255,255,0.28); line-height: 1.9; }
+    footer a { color: var(--teal); text-decoration: none; font-weight: 700; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">
+    <div class="hdr-logo"><img src="App_LOGO.png" alt="Shiftlog"></div>
+    <span class="hdr-brand">Shift<span>log.</span></span>
+  </a>
+</header>
+
+<div class="hero-banner">
+  <div class="badge">📄 Legal</div>
+  <h1>Terms of Service</h1>
+  <p>Please read these terms carefully before using Shiftlogs. By creating an account, you agree to be bound by them.</p>
+  <span class="last-updated">Last updated: June 2025</span>
+</div>
+
+<main>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <p class="toc-label">Contents</p>
+    <ol>
+      <li><a href="#s1">Acceptance of Terms</a></li>
+      <li><a href="#s2">Your Account &amp; Security</a></li>
+      <li><a href="#s3">Data Storage &amp; Usage</a></li>
+      <li><a href="#s4">User Conduct &amp; Sharing</a></li>
+      <li><a href="#s5">Limitation of Liability</a></li>
+      <li><a href="#s6">Termination</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="tos-section" id="s1" style="animation: fadeUp .6s .05s ease both;">
+    <div class="section-num">Section 01</div>
+    <h2>Acceptance of Terms</h2>
+    <p>By creating a Shiftlogs account, you agree to these terms. If you do not agree, please do not use the app.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="tos-section reveal" id="s2">
+    <div class="section-num">Section 02</div>
+    <h2>Your Account &amp; Security</h2>
+    <div class="tos-items">
+      <div class="tos-item">
+        <div class="tos-item-icon">🔒</div>
+        <div class="tos-item-body">
+          <strong>Password Protection</strong>
+          <p>We encrypt your password for your security. However, you are responsible for maintaining the confidentiality of your login credentials.</p>
+        </div>
+      </div>
+      <div class="tos-item">
+        <div class="tos-item-icon">👤</div>
+        <div class="tos-item-body">
+          <strong>Account Responsibility</strong>
+          <p>Any activity that happens under your account is your responsibility.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="tos-section reveal" id="s3">
+    <div class="section-num">Section 03</div>
+    <h2>Data Storage &amp; Usage</h2>
+    <div class="tos-items">
+      <div class="tos-item">
+        <div class="tos-item-icon">🗄️</div>
+        <div class="tos-item-body">
+          <strong>What We Store</strong>
+          <p>To provide the "Sync" and "Total Monthly Summary" features, Shiftlogs stores your account credentials, work schedules, shift details, and pay rates on our servers.</p>
+        </div>
+      </div>
+      <div class="tos-item">
+        <div class="tos-item-icon">🛡️</div>
+        <div class="tos-item-body">
+          <strong>Data Security</strong>
+          <p>While we use industry-standard measures to protect our database and encrypt your account password, other work-related data such as shift times and pay amounts is stored as provided. By using the app, you acknowledge that no transmission over the internet is 100% secure.</p>
+        </div>
+      </div>
+      <div class="tos-item">
+        <div class="tos-item-icon">🧮</div>
+        <div class="tos-item-body">
+          <strong>Data Accuracy</strong>
+          <p>Shiftlogs is a calculation tool. We are not responsible for any discrepancies between the app's totals and your actual physical paycheck.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-icon">⚠️</span>
+      <p>Always verify your hours and pay with your employer. Shiftlogs calculations are estimates and should not be the sole basis for payroll disputes.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="tos-section reveal" id="s4">
+    <div class="section-num">Section 04</div>
+    <h2>User Conduct &amp; Sharing</h2>
+    <div class="tos-items">
+      <div class="tos-item">
+        <div class="tos-item-icon">👥</div>
+        <div class="tos-item-body">
+          <strong>Following Friends</strong>
+          <p>If you use the "Follow" feature, you agree to share your schedule data with the users you approve. You can revoke this access at any time.</p>
+        </div>
+      </div>
+      <div class="tos-item">
+        <div class="tos-item-icon">🚫</div>
+        <div class="tos-item-body">
+          <strong>Prohibited Use</strong>
+          <p>You may not use Shiftlogs for any illegal activities or to scrape data from other users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="tos-section reveal" id="s5">
+    <div class="section-num">Section 05</div>
+    <h2>Limitation of Liability</h2>
+    <p>Shiftlogs is provided <em>"as is."</em> We are not liable for any financial loss, data loss, or employment disputes arising from your use of the app or any inaccuracies in the overtime calculations.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="tos-section reveal" id="s6">
+    <div class="section-num">Section 06</div>
+    <h2>Termination</h2>
+    <div class="tos-items">
+      <div class="tos-item">
+        <div class="tos-item-icon">⚖️</div>
+        <div class="tos-item-body">
+          <strong>By Us</strong>
+          <p>We reserve the right to suspend or delete accounts that violate these terms or interfere with the app's operation.</p>
+        </div>
+      </div>
+      <div class="tos-item">
+        <div class="tos-item-icon">🗑️</div>
+        <div class="tos-item-body">
+          <strong>By You</strong>
+          <p>You may delete your account and all associated data at any time via the app settings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    © 2025 Shiftlog.&nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="index.html">Home</a>&nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="support.html">Support &amp; Report a Problem</a>
+  </p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
